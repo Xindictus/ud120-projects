@@ -30,12 +30,29 @@ plt.show()
 
 ### your code here!  name your classifier object clf if you want the 
 ### visualization code (prettyPicture) to show you the decision boundary
+from time import time
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.metrics import accuracy_score
+from sklearn import svm
 
+features_train = features_train[:(len(labels_train)/100)*45]
+labels_train = labels_train[:(len(labels_train)/100)*45]
 
+clf = AdaBoostClassifier(svm.SVC(
+    kernel="rbf", C=700., gamma=100., probability=True, degree=3),
+    n_estimators=200, learning_rate=.5, algorithm='SAMME')
 
+print "Beginning training. . ."
+t0 = time()
+clf.fit(features_train, labels_train)
+print "training time:", round(time()-t0, 3), "s"
 
+print "Beginning predictions. . ."
+t0 = time()
+prediction = clf.predict(features_test)
+print "predicting time:", round(time()-t0, 3), "s"
 
-
+print accuracy_score(labels_test, prediction)
 
 
 try:
